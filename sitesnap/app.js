@@ -35,8 +35,10 @@ function say(s) {
   clearTimeout(msgTimer);
   msgTimer = setTimeout(() => ($("message").textContent = ""), 7000);
 }
+let lastSaveStatus;
 function status(s, bad = false) {
-  $("save").textContent = s;
+  lastSaveStatus = [s, bad];
+  $("save").textContent = t(s);
   $("save").toggleAttribute("data-error", bad);
 }
 function txwork(stores, mode, fn) {
@@ -65,8 +67,8 @@ function save(add = [], del = [], clear = false) {
       if (ver === revision) status("已儲存於本機");
     })
     .catch(() => {
-      status("未能儲存 · 請備份工程", true);
-      say("瀏覽器無法保存本次更改，請立即備份工程。");
+      status("未能儲存 · 請匯出記錄", true);
+      say(t("瀏覽器無法保存本次更改，請到用戶選單的資料管理匯出記錄。"));
     });
   return saving;
 }
@@ -97,7 +99,7 @@ async function boot() {
     if (saved) book = saved;
     status("已就緒 · 本機儲存");
   } catch {
-    status("暫存模式 · 請手動備份", true);
+    status("暫存模式 · 請匯出記錄", true);
   }
   selected = book.photos[0]?.id;
   draw();
@@ -109,7 +111,7 @@ function draw() {
     n = book.photos.length;
   $("count").textContent = String(n).padStart(2, "0");
   $("progress").textContent = n
-    ? book.photos.filter((i) => i.review).length + " / " + n + " 已覆核"
+    ? book.photos.filter((i) => i.review).length + " / " + n + t(" 已覆核")
     : "";
   $("list").replaceChildren();
   for (const [i, r] of book.photos.entries()) {
@@ -122,7 +124,7 @@ function draw() {
     b.className = "tile" + (r === p ? " active" : "");
     im.src = pics.get(r.id);
     im.alt = "";
-    v.append(el("small", r.review ? "已覆核" : "待覆核"));
+    v.append(el("small", r.review ? t("已覆核") : t("待覆核")));
     b.append(im, v);
     b.onclick = () => {
       selected = r.id;
@@ -141,9 +143,9 @@ function draw() {
   for (const k of details) $(k).value = p[k];
   $("draft").hidden = !p.draft;
   $("drafttext").textContent = p.draft || "";
-  $("review").textContent = p.review ? "撤回覆核" : "確認已覆核";
+  $("review").textContent = p.review ? t("撤回覆核") : t("確認已覆核");
   $("analyse").disabled = busy;
-  $("analyse").textContent = busy ? "分析中…" : "✧ AI 輔助觀察";
+  $("analyse").textContent = busy ? t("分析中…") : t("✧ AI 輔助觀察");
 }
 for (const k of fields)
   $(k).oninput = () => {
@@ -155,19 +157,19 @@ for (const k of details)
     const p = current();
     p[k] = $(k).value;
     p.review = null;
-    $("review").textContent = "確認已覆核";
+    $("review").textContent = t("確認已覆核");
     $("progress").textContent =
       book.photos.filter((i) => i.review).length +
       " / " +
       book.photos.length +
-      " 已覆核";
+      t(" 已覆核");
     const v = $("list").querySelector(".active span");
     if (v) {
       v.firstChild.textContent =
         String(book.photos.indexOf(p) + 1).padStart(2, "0") +
         "　" +
         (p.location || p.name);
-      v.querySelector("small").textContent = "待覆核";
+      v.querySelector("small").textContent = t("待覆核");
     }
     save();
   };
@@ -175,7 +177,7 @@ function review() {
   const p = current();
   if (!p.review) {
     if (!p.note.trim() || !book.author.trim()) {
-      say("請先填寫記錄人和現場觀察，再確認覆核。");
+      say(t("請先填寫記錄人和現場觀察，再確認覆核。"));
       (!book.author.trim() ? $("author") : $("note")).focus();
       return;
     }
@@ -203,6 +205,9 @@ async function resize(source, limit) {
 }
 function lock(v) {
   loading = v;
+  $("manage-data").disabled = v;
+  $("backup").disabled = v;
+  $("restore").disabled = v;
   document.querySelector("main").inert = v;
 }
 async function addFiles(files) {
@@ -244,12 +249,12 @@ async function addFiles(files) {
     if (total) await save(added);
     draw();
     say(
-      "已加入 " +
+      t("已加入 ") +
         total +
-        " 張相片" +
+        t(" 張相片") +
         (failed
-          ? "；有 " + failed + " 張未能加入（格式、大小或數量限制）。"
-          : "。"),
+          ? t("；有 ") + failed + t(" 張未能加入（格式、大小或數量限制）。")
+          : t("。")),
     );
   } finally {
     lock(false);
@@ -281,7 +286,7 @@ for (const [k, d] of [
   };
 $("remove").onclick = () => {
   const p = current();
-  if (!confirm("從本工程移除「" + p.name + "」及其觀察？")) return;
+  if (!confirm(t("從本工程移除「") + p.name + t("」及其觀察？"))) return;
   const i = book.photos.indexOf(p);
   book.photos.splice(i, 1);
   pics.delete(p.id);
@@ -289,6 +294,11 @@ $("remove").onclick = () => {
   save([], [p.id]);
   draw();
 };
+$("manage-data").onclick = () => {
+  document.getElementById("user-menu").open = false;
+  $("data-management").showModal();
+};
+$("close-data").onclick = () => $("data-management").close();
 function download(data, name, type) {
   const a = el("a"),
     u = URL.createObjectURL(new Blob([data], { type }));
@@ -306,7 +316,11 @@ $("backup").onclick = () =>
     (book.project || "SiteSnap") + "-" + book.date + ".sitesnap.json",
     "application/json",
   );
-$("restore").onclick = () => $("backupfile").click();
+$("restore").onclick = () => {
+  if (loading) return;
+  $("data-management").close();
+  $("backupfile").click();
+};
 $("backupfile").onchange = async (e) => {
   const f = e.target.files[0];
   e.target.value = "";
@@ -352,31 +366,23 @@ $("backupfile").onchange = async (e) => {
       next.photos.push(p);
       set.set(p.id, q.image);
     }
-    if (!confirm("以此備份取代目前工程？請先確定目前工程已備份。")) return;
+    if (!confirm(t("匯入會取代目前相片和文字記錄。請先匯出需要保留的記錄。繼續？"))) return;
     book = next;
     pics = set;
     selected = book.photos[0]?.id;
     await save([...pics], [], true);
     draw();
-    say("已開啟工程備份。");
+    say(t("記錄已匯入。"));
   } catch {
-    say("無法開啟：請選擇完整的 SiteSnap 工程備份。");
+    say(t("無法匯入，請選擇完整的 SiteSnap 記錄檔。"));
   } finally {
     lock(false);
   }
 };
-$("fresh").onclick = () => {
-  if (!confirm("建立空白工程並取代目前草稿？請先備份需要保留的紀錄。")) return;
-  book = fresh();
-  pics.clear();
-  selected = "";
-  save([], [], true);
-  draw();
-};
 function buildReport() {
   const missing = book.photos.find((p) => !p.review);
   if (!book.project.trim() || !book.date) {
-    say("請填寫工程名稱及巡查日期。");
+    say(t("請填寫工程名稱及巡查日期。"));
     (!book.project.trim() ? $("project") : $("date")).focus();
     return;
   }
@@ -384,9 +390,9 @@ function buildReport() {
     selected = missing.id;
     draw();
     say(
-      "尚有 " +
+      t("尚有 ") +
         book.photos.filter((p) => !p.review).length +
-        " 張相片待覆核，已選取第一張。",
+        t(" 張相片待覆核，已選取第一張。"),
     );
     return;
   }
@@ -398,7 +404,7 @@ function buildReport() {
     const im = el("img");
     im.src = pics.get(p.id);
     im.alt = p.name;
-    const flag = el("span", "已覆核　／　" + p.review.by);
+    const flag = el("span", t("已覆核　／　") + p.review.by);
     flag.className = "flag";
     section.append(
       el(
@@ -408,24 +414,24 @@ function buildReport() {
           " / " +
           book.photos.length,
       ),
-      el("h2", book.project + " · 工地巡查報告"),
+      el("h2", book.project + t(" · 工地巡查報告")),
       el(
         "p",
         [book.date, book.site, book.author].filter(Boolean).join("　｜　"),
       ),
       im,
       el("small", p.name),
-      el("h3", "位置及類別"),
-      el("p", (p.location || "未填寫位置") + "　／　" + p.category),
-      el("h3", "現場觀察"),
+      el("h3", t("位置及類別")),
+      el("p", (p.location || t("未填寫位置")) + "　／　" + t(p.category)),
+      el("h3", t("現場觀察")),
       el("p", p.note),
-      el("h3", "跟進措施"),
-      el("p", p.action || "未有記錄"),
+      el("h3", t("跟進措施")),
+      el("p", p.action || t("未有記錄")),
       flag,
       el(
         "small",
         "　" +
-          new Date(p.review.at).toLocaleString("zh-HK", {
+          new Date(p.review.at).toLocaleString(uiLanguage === "en" ? "en-GB" : "zh-HK", {
             timeZone: "Asia/Hong_Kong",
           }) +
           " HKT",
@@ -453,3 +459,9 @@ document.querySelector("main").inert = true;
 boot();
 if ("serviceWorker" in navigator && /^https?:$/.test(location.protocol))
   navigator.serviceWorker.register("./sw.js").catch(() => {});
+
+document.addEventListener("sitesnap:language", () => {
+  if (lastSaveStatus) status(...lastSaveStatus);
+  $("message").textContent = "";
+  draw();
+});
