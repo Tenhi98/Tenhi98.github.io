@@ -3,7 +3,5 @@
    See DEPLOY.md. */
 window.SITESNAP_AUTH = {
   version: 1,
-  /* hash of temporary QA password documented in DEPLOY.md — replace before production use */
-  passwordHash:
-    "4eea832c7a9b6bb524654fcdf0a8851f453868a8ff625a277718126b42bf1770",
+  passwordHash: "eb4863be2076877008bc7eb3ca41097ebd590e21fcdc97933833b561b6f03590",
 };
