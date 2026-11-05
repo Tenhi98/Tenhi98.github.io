@@ -80,6 +80,7 @@
         return;
       }
       sessionStorage.setItem(FLAG, "1");
+      sessionStorage.setItem(FLAG + "-h", expected);
       showApp();
     } catch (e) {
       if (err) err.textContent = "此瀏覽器無法驗證密碼，請改用較新版本。";
@@ -90,6 +91,7 @@
 
   function logout() {
     sessionStorage.removeItem(FLAG);
+    sessionStorage.removeItem(FLAG + "-h");
     // Soft reset: reload so app state / SW stay consistent
     location.reload();
   }
@@ -105,8 +107,19 @@
 
   function boot() {
     bind();
-    if (sessionStorage.getItem(FLAG) === "1") showApp();
-    else showGate();
+    // Login flag is sessionStorage only — never written into Cache Storage / SW shell.
+    // Re-check against current auth.config hash so a stale SW shell cannot fake auth.
+    const ok =
+      sessionStorage.getItem(FLAG) === "1" &&
+      expected &&
+      sessionStorage.getItem(FLAG + "-h") === expected;
+    if (ok) showApp();
+    else {
+      sessionStorage.removeItem(FLAG);
+    sessionStorage.removeItem(FLAG + "-h");
+      sessionStorage.removeItem(FLAG + "-h");
+      showGate();
+    }
   }
 
   if (document.readyState === "loading")
