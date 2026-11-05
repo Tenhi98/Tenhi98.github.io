@@ -1,5 +1,5 @@
-const CACHE = "sitesnap-shell-source-v2",
-  shell = ["./index.html", "./style.css", "./app.js", "./ai.js", "./gate.js", "./auth.config.js"].map(
+const CACHE = "sitesnap-shell-source-v1",
+  shell = ["./index.html", "./style.css", "./app.js", "./ai.js"].map(
     (s) => new URL(s, self.registration.scope).href,
   );
 self.addEventListener("install", (e) =>
