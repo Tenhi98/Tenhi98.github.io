@@ -1,4 +1,4 @@
-const CACHE = "sitesnap-shell-source-v4-gate",
+const CACHE = "sitesnap-shell-source-v5-gate",
   shell = ["./index.html", "./style.css", "./app.js", "./ai.js", "./gate.js", "./auth.config.js"].map(
     (s) => new URL(s, self.registration.scope).href,
   );
