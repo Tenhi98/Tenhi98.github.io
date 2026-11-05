@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="zh-HK">
+  <meta charset="utf-8" /><meta
+    name="viewport"
+    content="width=device-width,initial-scale=1"
+  /><meta name="theme-color" content="#153c37" /><title>
+    SiteSnap HK · 工地相片紀錄</title
+  ><link rel="stylesheet" href="style.css" />
+  <body class="gated">
+  <div id="gate" class="gate" hidden>
+    <div class="gate-card">
+      <div class="gate-brand">
+        <svg viewBox="0 0 40 40" width="40" height="40" aria-hidden="true">
+          <rect x="2" y="2" width="36" height="36" rx="9" fill="#e3efaa" />
+          <path
+            d="M9 16h6l2-4h7l2 4h5v13H9z"
+            fill="none"
+            stroke="#153c37"
+            stroke-width="2.5"
+          />
+          <circle
+            cx="20"
+            cy="22"
+            r="4"
+            fill="none"
+            stroke="#153c37"
+            stroke-width="2.5"
+          />
+        </svg>
+        <div>
+          <strong>SiteSnap <small>HK</small></strong>
+          <span>工地私人工作區</span>
+        </div>
+      </div>
+      <h1>請輸入通行密碼</h1>
+      <p>此為工地私人工作區。未授權訪客無法查看工程資料與相片。</p>
+      <form id="gate-form" autocomplete="off">
+        <label
+          >通行密碼
+          <input
+            id="gate-password"
+            type="password"
+            name="password"
+            autocomplete="current-password"
+            maxlength="128"
+            required
+          />
+        </label>
+        <p id="gate-error" class="gate-error" role="alert"></p>
+        <button type="submit" class="primary" id="gate-submit">進入工作區</button>
+      </form>
+      <p class="gate-note">連線受託管層輕量密碼保護 · 非 Cloudflare Access</p>
+    </div>
+  </div>
+  <div id="app" hidden>
+    <header>
+      <div class="brand">
+        <svg viewBox="0 0 40 40" width="34" height="34" aria-hidden="true">
+          <rect x="2" y="2" width="36" height="36" rx="9" fill="#e3efaa" />
+          <path
+            d="M9 16h6l2-4h7l2 4h5v13H9z"
+            fill="none"
+            stroke="#153c37"
+            stroke-width="2.5"
+          />
+          <circle
+            cx="20"
+            cy="22"
+            r="4"
+            fill="none"
+            stroke="#153c37"
+            stroke-width="2.5"
+          />
+        </svg>
+        SiteSnap <small>HK</small>
+      </div>
+      <div class="header-tools">
+        <span class="local">●　私人工作區</span>
+        <button type="button" id="logout" class="ghost">登出</button>
+      </div>
+    </header>
+    <main>
+      <div class="heading">
+        <div>
+          <div class="eyebrow">FIELD JOURNAL　 /　 HONG KONG</div>
+          <h1>工地相片紀錄</h1>
+          <p>拍下現場、記錄觀察，整理成一份巡查報告。</p>
+        </div>
+        <div class="actions">
+          <button id="settings">AI 連線設定</button
+          ><button id="report" class="primary">預覽報告 ↗</button>
+        </div>
+      </div>
+      <section class="project">
+        <div class="sectionhead">
+          <h2><i>01</i> 工程資料</h2>
+          <span id="save" role="status">本機草稿</span>
+        </div>
+        <div class="fields">
+          <label
+            >工程名稱<input
+              id="project"
+              maxlength="120"
+              placeholder="例如：九龍東改善工程" /></label
+          ><label
+            >地盤位置<input
+              id="site"
+              maxlength="160"
+              placeholder="地盤或地段" /></label
+          ><label>巡查日期<input id="date" type="date" /></label
+          ><label
+            >記錄人<input id="author" maxlength="80" placeholder="姓名或職銜"
+          /></label>
+        </div>
+      </section>
+      <div class="board">
+        <section class="rail">
+          <div class="sectionhead">
+            <h2><i>02</i> 相片冊</h2>
+            <b id="count">00</b>
+          </div>
+          <div class="actions">
+            <button class="primary" id="capture">＋ 拍照</button
+            ><button id="import">匯入相片</button>
+          </div>
+          <input
+            hidden
+            type="file"
+            id="camera"
+            accept="image/*"
+            capture="environment"
+          /><input hidden type="file" id="files" accept="image/*" multiple />
+          <div id="list"></div>
+        </section>
+        <section class="editor">
+          <div class="sectionhead">
+            <h2><i>03</i> 現場觀察</h2>
+            <span id="progress"></span>
+          </div>
+          <div id="empty">
+            <svg viewBox="0 0 200 112" width="180" aria-hidden="true">
+              <g fill="none" stroke="#71978a" stroke-width="2">
+                <path
+                  d="M12 96h178M38 94V49h42v45m-38-34h9m8 0h11m-28 11h9m8 0h11m18 23V29h10v65m-25-65 36-15 49 15H66m26-15v15m57 0v24m-4 0a4 4 0 1 0 7 2m-25 40V67h33v28m-25-19h6m7 0h6"
+                />
+                <path
+                  d="M20 20v-9h12m136 0h13v10M20 89v12h12m137 0h12V89"
+                  stroke="#b2bc81"
+                />
+              </g>
+            </svg>
+            <h3>加入第一張現場相片</h3>
+            <p>
+              用手機拍照，或從裝置選取多張相片。<br />相片只會保存在目前瀏覽器。
+            </p>
+          </div>
+          <div id="entry" hidden>
+            <img id="photo" alt="目前選取的工地相片" />
+            <div class="caption">
+              <span id="filename"></span>
+              <div>
+                <button id="up" aria-label="相片向前移">↑</button
+                ><button id="down" aria-label="相片向後移">↓</button
+                ><button id="remove">移除</button>
+              </div>
+            </div>
+            <div class="fields two">
+              <label
+                >拍攝位置<input
+                  id="location"
+                  maxlength="160"
+                  placeholder="例如：3 樓東翼" /></label
+              ><label
+                >觀察類別<select id="category">
+                  <option>一般現場紀錄</option>
+                  <option>個人防護裝備</option>
+                  <option>高處及臨邊</option>
+                  <option>通道及物料</option>
+                  <option>臨時用電</option>
+                  <option>其他</option>
+                </select></label
+              >
+            </div>
+            <label
+              >現場觀察<textarea
+                id="note"
+                maxlength="2400"
+                placeholder="描述相片可見的情況，以及需要查證之處。"
+              ></textarea></label
+            ><label
+              >跟進措施<textarea
+                id="action"
+                maxlength="1400"
+                placeholder="記錄行動、負責人或跟進期限。"
+              ></textarea>
+            </label>
+            <div id="draft" hidden>
+              <strong>AI 草稿 · 未經覆核</strong>
+              <p id="drafttext"></p>
+              <button id="adopt">加入現場觀察再編輯</button
+              ><button id="discard">捨棄草稿</button>
+            </div>
+            <div class="actions">
+              <button id="analyse">✧ AI 輔助觀察</button
+              ><button id="review" class="primary"></button>
+            </div>
+          </div>
+        </section>
+      </div>
+      <footer>
+        <span>SITESNAP HK　 /　 現場工作簿</span>
+        <div class="actions">
+          <button id="backup">備份工程</button
+          ><button id="restore">開啟備份</button
+          ><button id="fresh">新工程</button>
+        </div>
+        <input
+          hidden
+          type="file"
+          id="backupfile"
+          accept=".json,application/json"
+        />
+      </footer>
+      <p id="message" role="status"></p>
+    </main>
+    <dialog id="config">
+      <h2>AI 連線設定</h2>
+      <p>金鑰只在目前分頁使用；關閉或重新整理即清除。</p>
+      <label>服務商<select id="provider"></select></label>
+      <label id="regionField" hidden
+        >金鑰所屬平台或地域<select id="region"></select
+      ></label>
+      <label id="workspaceField" hidden
+        >百煉工作空間 ID<input
+          id="workspaceId"
+          placeholder="從百煉控制台複製工作空間 ID"
+          spellcheck="false"
+      /></label>
+      <label id="presetField" hidden
+        >視覺模型<select id="presetModel"></select
+      ></label>
+      <label id="arkField" hidden
+        >方舟視覺模型或接入點 ID<input
+          id="arkModel"
+          placeholder="例如 ep-…，請從方舟控制台複製"
+          spellcheck="false"
+      /></label>
+      <div id="custom" hidden>
+        <label
+          >完整 HTTPS Chat Completions 網址<input
+            id="endpoint"
+            type="url"
+            placeholder="https://gateway.example/v1/chat/completions" /></label
+        ><label>視覺模型 ID<input id="model" /></label>
+      </div>
+      <p id="routeHint" hidden></p>
+      <label
+        >API Key<input
+          type="password"
+          id="key"
+          autocomplete="off"
+          spellcheck="false" /></label
+      ><label
+        >分析深度<select id="level">
+          <option value="0">快速 · 初步記錄</option>
+          <option value="1" selected>標準 · 日常巡查</option>
+          <option value="2">深入 · 複雜場景</option>
+        </select></label
+      >
+      <p>
+        每次只傳一張縮圖及觀察指令。分析深度會調整影像大小、回覆上限及支援模型的推理強度。
+      </p>
+      <button class="primary" id="setdone">完成</button>
+    </dialog>
+    <dialog id="consent">
+      <h2>授權單張相片分析</h2>
+      <img id="consentimg" alt="即將傳送的相片" />
+      <p id="destination"></p>
+      <p>確認有權向上述服務傳送這張相片。費用由你的 API 帳戶承擔。</p>
+      <div class="actions">
+        <button id="nosend">取消</button
+        ><button class="primary" id="send">授權並傳送此相片</button>
+      </div>
+    </dialog>
+    <dialog id="preview">
+      <div class="actions tools">
+        <button id="closepreview">返回編輯</button
+        ><button class="primary" id="print">列印／儲存 PDF</button>
+      </div>
+      <div id="pages"></div>
+    </dialog>
+  </div>
+    <script src="auth.config.js"></script>
+    <script src="gate.js"></script>
+  </body>
+</html>
