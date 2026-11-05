@@ -1,4 +1,4 @@
-const CACHE = "sitesnap-shell-source-v1",
+const CACHE = "sitesnap-shell-source-v3-nolock",
   shell = ["./index.html", "./style.css", "./app.js", "./ai.js"].map(
     (s) => new URL(s, self.registration.scope).href,
   );
