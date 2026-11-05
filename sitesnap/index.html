@@ -6,7 +6,53 @@
   /><meta name="theme-color" content="#153c37" /><title>
     SiteSnap HK · 工地相片紀錄</title
   ><link rel="stylesheet" href="style.css" />
-  <body>
+  <body class="gated">
+  <div id="gate" class="gate" hidden>
+    <div class="gate-card">
+      <div class="gate-brand">
+        <svg viewBox="0 0 40 40" width="40" height="40" aria-hidden="true">
+          <rect x="2" y="2" width="36" height="36" rx="9" fill="#e3efaa" />
+          <path
+            d="M9 16h6l2-4h7l2 4h5v13H9z"
+            fill="none"
+            stroke="#153c37"
+            stroke-width="2.5"
+          />
+          <circle
+            cx="20"
+            cy="22"
+            r="4"
+            fill="none"
+            stroke="#153c37"
+            stroke-width="2.5"
+          />
+        </svg>
+        <div>
+          <strong>SiteSnap <small>HK</small></strong>
+          <span>工地私人工作區</span>
+        </div>
+      </div>
+      <h1>請輸入通行密碼</h1>
+      <p>此為工地私人工作區。未授權訪客無法查看工程資料與相片。</p>
+      <form id="gate-form" autocomplete="off">
+        <label
+          >通行密碼
+          <input
+            id="gate-password"
+            type="password"
+            name="password"
+            autocomplete="current-password"
+            maxlength="128"
+            required
+          />
+        </label>
+        <p id="gate-error" class="gate-error" role="alert"></p>
+        <button type="submit" class="primary" id="gate-submit">進入工作區</button>
+      </form>
+      <p class="gate-note">連線受託管層輕量密碼保護 · 非 Cloudflare Access</p>
+    </div>
+  </div>
+  <div id="app" hidden>
     <header>
       <div class="brand">
         <svg viewBox="0 0 40 40" width="34" height="34" aria-hidden="true">
@@ -28,7 +74,10 @@
         </svg>
         SiteSnap <small>HK</small>
       </div>
-      <span class="local">●　私人工作區</span>
+      <div class="header-tools">
+        <span class="local">●　私人工作區</span>
+        <button type="button" id="logout" class="ghost">登出</button>
+      </div>
     </header>
     <main>
       <div class="heading">
@@ -240,7 +289,8 @@
       </div>
       <div id="pages"></div>
     </dialog>
-    <script src="app.js"></script>
-    <script src="ai.js"></script>
+  </div>
+    <script src="auth.config.js"></script>
+    <script src="gate.js"></script>
   </body>
 </html>
