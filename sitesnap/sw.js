@@ -1,8 +1,8 @@
 /* SiteSnap HK service worker — shell assets only.
    Auth lives in sessionStorage (never written into Cache Storage).
    Navigate / gate / auth.config: network-first so password gate updates aren't stuck behind an old shell. */
-const CACHE = "sitesnap-shell-source-v6-gate";
-const shell = ["./style.css", "./app.js", "./ai.js"].map(
+const CACHE = "sitesnap-shell-user-language-v8";
+const shell = ["./style.css?v=user-menu-8", "./i18n.js?v=user-menu-8", "./app.js?v=user-menu-8", "./ai.js?v=user-menu-8"].map(
   (s) => new URL(s, self.registration.scope).href,
 );
 const networkFirst = ["./index.html", "./gate.js", "./auth.config.js"].map(
