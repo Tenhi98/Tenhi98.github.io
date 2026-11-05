@@ -398,9 +398,10 @@ dialog > p {
     overflow: visible !important;
     background: white;
   }
-  body > header,
-  body > main,
-  body > dialog:not(#preview),
+  #gate,
+  #app > header,
+  #app > main,
+  #app > dialog:not(#preview),
   .tools {
     display: none !important;
   }
@@ -553,4 +554,13 @@ button.ghost {
 button.ghost:hover {
   background: rgba(227, 239, 170, 0.12);
   color: #e3efaa;
+}
+
+.gate-card > [data-switch-language] {
+  margin: 12px 0;
+}
+@media (max-width: 640px) {
+  .header-tools .local { display: none; }
+  .header-tools { gap: 6px; }
+  header { flex-wrap: wrap; gap: 8px; }
 }

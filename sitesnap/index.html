@@ -32,8 +32,9 @@
           <span>工地私人工作區</span>
         </div>
       </div>
+      <button type="button" data-switch-language>English</button>
       <h1>請輸入通行密碼</h1>
-      <p>此為工地私人工作區。未授權訪客無法查看工程資料與相片。</p>
+      <p>輸入通行密碼以開啟此裝置上的工地工作簿。</p>
       <form id="gate-form" autocomplete="off">
         <label
           >通行密碼
@@ -49,7 +50,7 @@
         <p id="gate-error" class="gate-error" role="alert"></p>
         <button type="submit" class="primary" id="gate-submit">進入工作區</button>
       </form>
-      <p class="gate-note">連線受託管層輕量密碼保護 · 非 Cloudflare Access</p>
+      <p class="gate-note">此裝置會在瀏覽器內驗證通行密碼。</p>
     </div>
   </div>
   <div id="app" hidden>
@@ -76,6 +77,7 @@
       </div>
       <div class="header-tools">
         <span class="local">●　私人工作區</span>
+        <button type="button" data-switch-language>English</button>
         <button type="button" id="logout" class="ghost">登出</button>
       </div>
     </header>
@@ -172,12 +174,12 @@
                   placeholder="例如：3 樓東翼" /></label
               ><label
                 >觀察類別<select id="category">
-                  <option>一般現場紀錄</option>
-                  <option>個人防護裝備</option>
-                  <option>高處及臨邊</option>
-                  <option>通道及物料</option>
-                  <option>臨時用電</option>
-                  <option>其他</option>
+                  <option value="一般現場紀錄">一般現場紀錄</option>
+                  <option value="個人防護裝備">個人防護裝備</option>
+                  <option value="高處及臨邊">高處及臨邊</option>
+                  <option value="通道及物料">通道及物料</option>
+                  <option value="臨時用電">臨時用電</option>
+                  <option value="其他">其他</option>
                 </select></label
               >
             </div>
@@ -290,6 +292,7 @@
       <div id="pages"></div>
     </dialog>
   </div>
+    <script src="i18n.js"></script>
     <script src="auth.config.js"></script>
     <script src="gate.js"></script>
   </body>

@@ -61,18 +61,18 @@
     const pwd = (input && input.value) || "";
     if (err) err.textContent = "";
     if (!pwd) {
-      if (err) err.textContent = "請輸入通行密碼。";
+      if (err) err.textContent = t("請輸入通行密碼。");
       return;
     }
     if (!expected) {
-      if (err) err.textContent = "尚未設定通行密碼雜湊，請聯絡統籌。";
+      if (err) err.textContent = t("尚未設定通行密碼雜湊，請聯絡統籌。");
       return;
     }
     if (btn) btn.disabled = true;
     try {
       const hash = await sha256Hex(pwd);
       if (hash !== expected) {
-        if (err) err.textContent = "密碼不正確，無法進入私人工作區。";
+        if (err) err.textContent = t("密碼不正確，無法進入私人工作區。");
         if (input) {
           input.value = "";
           input.focus();
@@ -82,7 +82,7 @@
       sessionStorage.setItem(FLAG, "1");
       showApp();
     } catch (e) {
-      if (err) err.textContent = "此瀏覽器無法驗證密碼，請改用較新版本。";
+      if (err) err.textContent = t("此瀏覽器無法驗證密碼，請改用較新版本。");
     } finally {
       if (btn) btn.disabled = false;
     }
@@ -105,6 +105,7 @@
 
   function boot() {
     bind();
+    document.addEventListener("sitesnap:language", () => { document.getElementById("gate-error").textContent = ""; });
     if (sessionStorage.getItem(FLAG) === "1") showApp();
     else showGate();
   }
