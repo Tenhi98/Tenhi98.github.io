@@ -1,0 +1,39 @@
+# 在 GitHub 的 Windows 電腦上打包 SiteSnap 桌面版（exe）。
+# 完成後到 Actions 頁面該次執行的 Artifacts 下載 SiteSnap-windows。
+name: SiteSnap desktop (Windows)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["claude/**"]
+    paths:
+      - "sitesnap-claude/**"
+      - ".github/workflows/sitesnap-desktop.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: sitesnap-claude/desktop
+    env:
+      CSC_IDENTITY_AUTO_DISCOVERY: "false"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: sitesnap-claude/desktop/package-lock.json
+      - run: npm ci
+      - run: npm run dist:win
+      - uses: actions/upload-artifact@v4
+        with:
+          name: SiteSnap-windows
+          path: |
+            sitesnap-claude/desktop/dist/SiteSnap-*-portable.exe
+            sitesnap-claude/desktop/dist/SiteSnap-*-setup.exe
+          retention-days: 30

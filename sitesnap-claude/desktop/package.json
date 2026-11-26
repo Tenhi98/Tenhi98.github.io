@@ -1,0 +1,41 @@
+{
+  "name": "sitesnap-desktop",
+  "productName": "SiteSnap",
+  "version": "1.0.0",
+  "description": "SiteSnap 工地巡查 桌面版",
+  "author": "SiteSnap",
+  "license": "UNLICENSED",
+  "private": true,
+  "main": "main.js",
+  "scripts": {
+    "web": "node copy-web.cjs",
+    "start": "node copy-web.cjs && electron .",
+    "dist:win": "node copy-web.cjs && electron-builder --win --x64 --publish never",
+    "dist:linux-dir": "node copy-web.cjs && electron-builder --linux dir --publish never"
+  },
+  "devDependencies": {
+    "electron": "45.2.3",
+    "electron-builder": "26.18.1"
+  },
+  "build": {
+    "appId": "hk.sitesnap.desktop",
+    "productName": "SiteSnap",
+    "copyright": "SiteSnap",
+    "files": ["main.js", "preload.js", "web/**/*"],
+    "directories": { "output": "dist", "buildResources": "build" },
+    "win": {
+      "target": ["portable", "nsis"],
+      "icon": "build/icon.png"
+    },
+    "portable": { "artifactName": "SiteSnap-${version}-portable.exe" },
+    "nsis": {
+      "artifactName": "SiteSnap-${version}-setup.exe",
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "shortcutName": "SiteSnap 工地巡查"
+    },
+    "linux": { "target": "dir", "icon": "build/icon.png" }
+  }
+}
