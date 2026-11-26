@@ -150,16 +150,16 @@
 
 <dialog id="ai" class="dlg" aria-labelledby="ai-title">
   <h2 id="ai-title" data-t="ai.settings"></h2>
-  <p class="hint" data-t="ai.keyNote"></p>
-  <label><span data-t="ai.provider"></span>
-    <select id="ai-provider">
-      <option value="claude">Anthropic Claude</option>
-      <option value="compat" data-t="ai.compat"></option>
-    </select>
-  </label>
-  <label id="ai-endpoint-wrap" hidden><span data-t="ai.endpoint"></span><input id="ai-endpoint" type="url" placeholder="https://…/v1/chat/completions" spellcheck="false"></label>
-  <label><span data-t="ai.model"></span><input id="ai-model" spellcheck="false"></label>
-  <label><span>API Key</span><input id="ai-key" type="password" autocomplete="off" spellcheck="false"></label>
+  <p class="hint" data-t="ai.direct"></p>
+  <label><span data-t="ai.provider"></span><select id="ai-provider"></select></label>
+  <div id="ai-fields" class="ai-fields" hidden>
+    <label id="ai-region-wrap" hidden><span data-t="ai.region"></span><select id="ai-region"></select></label>
+    <label><span class="label-row"><span data-t="ai.endpoint"></span><button type="button" id="ai-reset-url" class="link" data-t="ai.resetUrl"></button></span><input id="ai-endpoint" type="url" spellcheck="false"></label>
+    <label><span data-t="ai.model"></span><input id="ai-model" list="ai-models" spellcheck="false" autocomplete="off"><datalist id="ai-models"></datalist></label>
+    <p id="ai-model-hint" class="hint"></p>
+    <label><span>API Key</span><input id="ai-key" type="password" autocomplete="off" spellcheck="false"></label>
+    <p class="hint" data-t="ai.keyNote"></p>
+  </div>
   <label><span data-t="ai.depth"></span>
     <select id="ai-depth">
       <option value="0" data-t="ai.depth0"></option>

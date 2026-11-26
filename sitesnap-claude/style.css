@@ -182,6 +182,10 @@ dialog::backdrop { background: rgb(10 15 18 / .55); }
 .facts div { display: flex; justify-content: space-between; gap: 12px; border-bottom: 1px solid var(--line); padding-bottom: 6px; }
 .facts dt { color: var(--ink-soft); }
 .facts dd { margin: 0; font-weight: 600; font-variant-numeric: tabular-nums; text-align: right; }
+.ai-fields { display: grid; gap: 14px; }
+.label-row { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+button.link { border: 0; background: none; padding: 0; min-height: 0; font-size: 12.5px; font-weight: 600; color: var(--focus); text-decoration: underline; }
+optgroup { font-weight: 700; }
 .consent-img { max-height: 240px; width: 100%; object-fit: contain; background: var(--surface-2); border-radius: var(--r); }
 
 /* Report preview */
